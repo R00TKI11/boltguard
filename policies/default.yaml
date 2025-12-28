@@ -1,0 +1,75 @@
+name: "BoltGuard Default Policy"
+description: "Reasonable baseline security checks for container images"
+version: "0.1.0"
+
+settings:
+  fail_on_error: false
+  min_severity: "low"
+
+rules:
+  - id: "no-root-user"
+    name: "Container should not run as root"
+    description: "Running as root increases attack surface and privilege escalation risk"
+    severity: "high"
+    kind: "user"
+    config:
+      allow_root: false
+
+  - id: "reasonable-size"
+    name: "Image size should be reasonable"
+    description: "Large images slow down deployments and may contain unnecessary tooling"
+    severity: "medium"
+    kind: "size"
+    config:
+      max_mb: 2048
+      warn_mb: 1024
+
+  - id: "require-labels"
+    name: "Require basic metadata labels"
+    description: "Labels help with tracking, inventory, and automation"
+    severity: "low"
+    kind: "label"
+    config:
+      required:
+        - "maintainer"
+        - "version"
+
+  - id: "no-secret-env"
+    name: "No secrets in environment variables"
+    description: "Hardcoded secrets in ENV can leak via docker inspect"
+    severity: "critical"
+    kind: "env"
+    config:
+      deny_patterns:
+        - "(?i)password"
+        - "(?i)secret"
+        - "(?i)token"
+        - "(?i)api[_-]?key"
+
+  - id: "known-base"
+    name: "Use known, maintained base images"
+    description: "Unknown or custom bases may have unpatched vulnerabilities"
+    severity: "medium"
+    kind: "base"
+    config:
+      allowed_prefixes:
+        - "alpine"
+        - "debian"
+        - "ubuntu"
+        - "node"
+        - "python"
+        - "golang"
+        - "nginx"
+        - "redis"
+        - "postgres"
+        - "scratch"
+      allow_unknown: true
+
+  - id: "layer-limit"
+    name: "Reasonable layer count"
+    description: "Too many layers can hurt performance and indicate build inefficiency"
+    severity: "low"
+    kind: "layers"
+    config:
+      max_layers: 50
+      warn_layers: 30

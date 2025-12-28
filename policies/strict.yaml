@@ -1,0 +1,74 @@
+name: "BoltGuard Strict Policy"
+description: "High-security policy for production environments"
+version: "0.1.0"
+
+settings:
+  fail_on_error: true
+  min_severity: "medium"
+
+rules:
+  - id: "no-root-user"
+    name: "Must not run as root"
+    description: "Production images must use non-root users"
+    severity: "critical"
+    kind: "user"
+    fail_fast: true
+    config:
+      allow_root: false
+
+  - id: "strict-size-limit"
+    name: "Image must be under 1GB"
+    description: "Keep images lean for faster deployments"
+    severity: "high"
+    kind: "size"
+    config:
+      max_mb: 1024
+
+  - id: "require-prod-labels"
+    name: "Production metadata required"
+    description: "All production images need proper labeling"
+    severity: "high"
+    kind: "label"
+    config:
+      required:
+        - "maintainer"
+        - "version"
+        - "commit"
+        - "build-date"
+        - "vendor"
+
+  - id: "no-secret-env"
+    name: "No secrets in ENV"
+    description: "Secrets must be injected at runtime"
+    severity: "critical"
+    fail_fast: true
+    kind: "env"
+    config:
+      deny_patterns:
+        - "(?i)password"
+        - "(?i)secret"
+        - "(?i)token"
+        - "(?i)api[_-]?key"
+        - "(?i)credential"
+        - "(?i)auth"
+
+  - id: "approved-base-only"
+    name: "Only approved base images"
+    description: "Must use vetted, hardened base images"
+    severity: "critical"
+    kind: "base"
+    config:
+      allowed_prefixes:
+        - "alpine"
+        - "distroless"
+        - "scratch"
+      allow_unknown: false
+
+  - id: "minimal-layers"
+    name: "Minimize layer count"
+    description: "Use multi-stage builds to reduce layers"
+    severity: "medium"
+    kind: "layers"
+    config:
+      max_layers: 20
+      warn_layers: 15

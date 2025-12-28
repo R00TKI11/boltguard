@@ -1,0 +1,35 @@
+name: "BoltGuard Permissive Policy"
+description: "Lenient policy for development and testing"
+version: "0.1.0"
+
+settings:
+  fail_on_error: false
+  min_severity: "medium"
+
+rules:
+  - id: "warn-root"
+    name: "Warn if running as root"
+    description: "Root is allowed but not recommended"
+    severity: "low"
+    kind: "user"
+    config:
+      allow_root: true
+
+  - id: "size-check"
+    name: "Warn on large images"
+    description: "Very large images can be slow"
+    severity: "low"
+    kind: "size"
+    config:
+      warn_mb: 3072
+
+  - id: "no-hardcoded-secrets"
+    name: "Check for obvious secrets"
+    description: "Don't hardcode credentials"
+    severity: "medium"
+    kind: "env"
+    config:
+      deny_patterns:
+        - "(?i)password=.+"
+        - "(?i)secret=.+"
+        - "(?i)api[_-]?key=.+"
