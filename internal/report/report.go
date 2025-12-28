@@ -51,6 +51,7 @@ func New(imageName string, f *facts.Facts, results []*rules.Result, p *policy.Po
 }
 
 // Text outputs a human-readable text report
+//nolint:errcheck // writes to stdout, nothing useful to do on error
 func (r *Report) Text(w io.Writer) error {
 	fmt.Fprintf(w, "BoltGuard Report\n")
 	fmt.Fprintf(w, "================\n\n")
