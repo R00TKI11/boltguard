@@ -10,6 +10,19 @@ BoltGuard only analyzes what's already on the host:
 2. **No external databases** - all checks are policy-based
 3. **No phone-home** - zero telemetry or analytics
 
+### Typical air-gapped workflow
+
+On a machine with internet access:
+
+    boltguard -bundle-export policies.tar.gz
+
+Transfer the bundle using removable media or an internal artifact store.
+
+On the air-gapped system:
+
+    boltguard -bundle-import policies.tar.gz
+    boltguard myimage.tar
+
 ## Air-Gapped Setup
 
 ### Option 1: Build from source
@@ -46,6 +59,17 @@ Transfer tarball to air-gapped host:
 docker load -i nginx-latest.tar
 boltguard nginx:latest
 ```
+
+### What is included in a bundle
+
+A BoltGuard bundle contains:
+
+- Policy definitions
+- Metadata required for evaluation
+- Versioned schema information
+
+Bundles are intentionally explicit and self-contained. BoltGuard does not
+automatically fetch updates or external data when operating offline.
 
 ## CI/CD in Air-Gap
 
