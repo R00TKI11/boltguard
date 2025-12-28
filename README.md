@@ -1,2 +1,10 @@
-# boltguard
-BoltGuard is a fast, offline-first container policy engine designed for developers and air-gapped environments. It evaluates container images against human-readable policies in milliseconds -> no databases, no daemons, no network required.
+# BoltGuard ⚡
+
+BoltGuard is a lightweight, policy-first container security tool.
+
+It answers one question fast:
+
+> **Is this container acceptable for *our* risk tolerance?**
+
+BoltGuard runs in milliseconds, works fully offline, and uses
+human-readable policies you can trust in development, CI, and air-gapped environments.
