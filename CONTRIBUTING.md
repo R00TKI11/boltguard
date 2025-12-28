@@ -14,7 +14,7 @@ Thanks for your interest in contributing!
 
 ```bash
 # clone the repo
-git clone https://github.com/yourusername/boltguard.git
+git clone https://github.com/R00TKI11/boltguard.git
 cd boltguard
 
 # download dependencies

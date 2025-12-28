@@ -5,8 +5,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/yourusername/boltguard/internal/facts"
-	"github.com/yourusername/boltguard/internal/policy"
+	"github.com/R00TKI11/boltguard/internal/facts"
+	"github.com/R00TKI11/boltguard/internal/policy"
 )
 
 // UserEvaluator checks user/root configuration

@@ -7,9 +7,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/yourusername/boltguard/internal/facts"
-	"github.com/yourusername/boltguard/internal/policy"
-	"github.com/yourusername/boltguard/internal/rules"
+	"github.com/R00TKI11/boltguard/internal/facts"
+	"github.com/R00TKI11/boltguard/internal/policy"
+	"github.com/R00TKI11/boltguard/internal/rules"
 )
 
 // Report aggregates evaluation results for output
@@ -154,7 +154,7 @@ func (r *Report) SARIF(w io.Writer) error {
 				"tool": map[string]interface{}{
 					"driver": map[string]interface{}{
 						"name":            "BoltGuard",
-						"informationUri":  "https://github.com/yourusername/boltguard",
+						"informationUri":  "https://github.com/R00TKI11/boltguard",
 						"version":         "0.1.0",
 						"semanticVersion": "0.1.0",
 						"rules":           r.buildSarifRules(),

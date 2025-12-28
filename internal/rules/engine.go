@@ -3,8 +3,8 @@ package rules
 import (
 	"fmt"
 
-	"github.com/yourusername/boltguard/internal/facts"
-	"github.com/yourusername/boltguard/internal/policy"
+	"github.com/R00TKI11/boltguard/internal/facts"
+	"github.com/R00TKI11/boltguard/internal/policy"
 )
 
 // Result represents the outcome of evaluating a single rule

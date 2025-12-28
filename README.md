@@ -36,7 +36,7 @@ boltguard -format json alpine:latest > report.json
 ### From source
 
 ```bash
-git clone https://github.com/yourusername/boltguard.git
+git clone https://github.com/R00TKI11/boltguard.git
 cd boltguard
 make build
 ./bin/boltguard --version
@@ -44,7 +44,7 @@ make build
 
 ### Pre-built binaries
 
-Download from [releases](https://github.com/yourusername/boltguard/releases)
+Download from [releases](https://github.com/R00TKI11/boltguard/releases)
 
 ## Usage
 

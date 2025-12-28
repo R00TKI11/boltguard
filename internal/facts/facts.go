@@ -7,7 +7,7 @@ import (
 	"time"
 
 	v1 "github.com/google/go-containerregistry/pkg/v1"
-	"github.com/yourusername/boltguard/internal/image"
+	"github.com/R00TKI11/boltguard/internal/image"
 )
 
 // Facts represents everything we extract from an image that policies care about
@@ -123,8 +123,8 @@ func Extract(img *image.Image) (*Facts, error) {
 	return f, nil
 }
 
-// inferBaseImage attempts to guess the base image from history
-// This is kinda hacky but works for most common cases
+// inferBaseImage attempts to determine the base image from build history.
+// Uses heuristics to parse FROM commands from layer metadata.
 func inferBaseImage(history []v1.History) string {
 	if len(history) == 0 {
 		return "unknown"
