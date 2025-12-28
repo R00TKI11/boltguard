@@ -52,9 +52,14 @@ func loadFromDaemon(ref string) (*Image, error) {
 		return nil, fmt.Errorf("invalid reference: %w", err)
 	}
 
+	// Try with default options first
 	img, err := daemon.Image(nameRef)
 	if err != nil {
-		return nil, err
+		// On Windows with Docker Desktop, try with explicit daemon options
+		img, err = daemon.Image(nameRef, daemon.WithUnbufferedOpener())
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return buildImage(ref, img)
