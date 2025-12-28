@@ -2,21 +2,30 @@
 
 BoltGuard is a lightweight, policy-first container security tool.
 
-It answers one question fast:
+## What BoltGuard is (and is not)
 
-> **Is this container acceptable for *our* risk tolerance?**
+BoltGuard is a **policy engine for container images**.
 
-BoltGuard runs in milliseconds, works fully offline, and uses
-human-readable policies you can trust in development, CI, and air-gapped environments.
+It answers one question — quickly and deterministically:
 
-## Features
+> **Does this container image comply with our rules?**
 
-- **Fast** - Scans complete in milliseconds, not minutes
-- **Offline-first** - No registry access or external databases required
-- **Policy-driven** - Human-readable YAML policies you can customize
-- **Multiple outputs** - Text for humans, JSON/SARIF for CI/CD
-- **Air-gap friendly** - Works in restricted environments
-- **Simple** - One binary, no dependencies
+BoltGuard is intentionally **not** a full CVE scanner and does not maintain a
+large vulnerability database. Instead, it focuses on enforcing
+human-readable, offline-friendly policies early in development and CI.
+
+BoltGuard is designed to complement tools like Trivy or Grype by acting as a
+fast, deterministic gate before heavier security analysis runs.
+
+## Supported image inputs
+
+BoltGuard can scan container images from multiple sources:
+
+- Local images via a container runtime (e.g. `nginx:latest`)
+- Image tarballs created with `docker save`
+- Offline policy bundles imported via `-bundle-import`
+
+No network access is required during scanning unless explicitly enabled.
 
 ## Quick Start
 
@@ -92,37 +101,28 @@ BoltGuard ships with three example policies:
 ### Example Policy
 
 ```yaml
-name: "My Policy"
-description: "Container security baseline"
-version: "1.0.0"
-
-settings:
-  fail_on_error: false
-  min_severity: "low"
-
 rules:
-  - id: "no-root"
-    name: "Don't run as root"
-    severity: "high"
-    kind: "user"
-    config:
-      allow_root: false
+  - id: require-non-root
+    deny:
+      user: root
+    message: "Image must not run as root. Set USER in the Dockerfile."
 
-  - id: "size-check"
-    name: "Keep images lean"
-    severity: "medium"
-    kind: "size"
-    config:
-      max_mb: 2048
+  - id: disallow-latest-tag
+    deny:
+      tag: latest
+    message: "Avoid using the 'latest' tag for reproducible builds."
 
-  - id: "no-secrets"
-    name: "No hardcoded secrets"
-    severity: "critical"
-    kind: "env"
-    config:
-      deny_patterns:
-        - "(?i)password"
-        - "(?i)api[_-]?key"
+  - id: require-standard-labels
+    require:
+      labels:
+        - org.opencontainers.image.source
+        - org.opencontainers.image.revision
+    message: "Image must include standard OCI source and revision labels."
+
+  - id: image-size-limit
+    deny:
+      image_size_mb_gt: 300
+    message: "Image exceeds the maximum allowed size (300MB)."
 ```
 
 See [docs/policy.md](docs/policy.md) for the full policy guide.
@@ -176,6 +176,17 @@ BoltGuard is designed for offline environments:
 3. Run against local images (daemon or tarball)
 
 No network access needed. See [docs/airgap.md](docs/airgap.md) for details.
+
+## Performance
+
+BoltGuard is designed to be fast by construction.
+
+It avoids network calls, large vulnerability databases, and unnecessary
+filesystem extraction. Scans operate on image metadata and selected file
+signals only, allowing BoltGuard to run early in development workflows and CI.
+
+Exact performance characteristics depend on image size, enabled policies,
+and cache state. Formal benchmarks will be documented in a future release.
 
 ## Documentation
 
