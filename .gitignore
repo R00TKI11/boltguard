@@ -33,9 +33,16 @@ go.work.sum
 *.swp
 *.swo
 
+# Claude Code settings
+.claude/
+
 # BoltGuard specific
 boltguard
+bin/
 tmp/
 *.tmp
 .DS_Store
 Thumbs.db
+
+# Local documentation (not for public repo)
+PROJECT_JOURNAL.md
