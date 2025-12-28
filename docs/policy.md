@@ -24,6 +24,22 @@ rules:
       key: value
 ```
 
+## Policy stability guarantees
+
+BoltGuard policies are versioned and evaluated deterministically.
+
+Changes to the policy schema are introduced explicitly and will not silently
+change the meaning of existing policies. Older policy files will continue to
+work or fail loudly if incompatible.
+
+### Why BoltGuard policies are intentionally simple
+
+BoltGuard policies are designed to be readable, auditable, and predictable.
+
+Unlike general-purpose policy languages, BoltGuard avoids embedding complex
+logic or control flow. This keeps policies easy to review and suitable for
+restricted or regulated environments.
+
 ## Rule Types
 
 ### `user` - User/Root Checks
