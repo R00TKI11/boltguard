@@ -96,12 +96,12 @@ func Extract(img *image.Image) (*Facts, error) {
 	// layers
 	f.LayerCount = len(img.Layers)
 	for _, layer := range img.Layers {
-		digest, _ := layer.Digest()
-		size, _ := layer.Size()
+		layerDigest, _ := layer.Digest()
+		layerSize, _ := layer.Size()
 
 		f.Layers = append(f.Layers, LayerFact{
-			Digest: digest.String(),
-			Size:   size,
+			Digest: layerDigest.String(),
+			Size:   layerSize,
 		})
 	}
 
