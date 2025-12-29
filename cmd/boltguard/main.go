@@ -38,6 +38,7 @@ func main() {
 		bundleExport = flag.String("bundle-export", "", "export policies as bundle")
 	)
 
+	//nolint:errcheck // writes to stderr, nothing useful to do on error
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "Usage: boltguard [options] <image>\n\n")
 		fmt.Fprintf(os.Stderr, "BoltGuard - Fast, offline container policy checks\n\n")
@@ -59,6 +60,7 @@ func main() {
 	}
 
 	// handle cache operations
+	//nolint:errcheck // writes to stderr, nothing useful to do on error
 	if *clearCache {
 		if err := handleCacheClear(*cacheDir); err != nil {
 			fmt.Fprintf(os.Stderr, "error: %v\n", err)
@@ -67,6 +69,7 @@ func main() {
 		return
 	}
 
+	//nolint:errcheck // writes to stderr, nothing useful to do on error
 	if *cacheStats {
 		if err := handleCacheStats(*cacheDir); err != nil {
 			fmt.Fprintf(os.Stderr, "error: %v\n", err)
@@ -76,6 +79,7 @@ func main() {
 	}
 
 	// handle bundle operations
+	//nolint:errcheck // writes to stderr, nothing useful to do on error
 	if *bundleImport != "" {
 		if err := handleBundleImport(*bundleImport); err != nil {
 			fmt.Fprintf(os.Stderr, "error: %v\n", err)
@@ -84,6 +88,7 @@ func main() {
 		return
 	}
 
+	//nolint:errcheck // writes to stderr, nothing useful to do on error
 	if *bundleList {
 		if err := handleBundleList(); err != nil {
 			fmt.Fprintf(os.Stderr, "error: %v\n", err)
@@ -92,6 +97,7 @@ func main() {
 		return
 	}
 
+	//nolint:errcheck // writes to stderr, nothing useful to do on error
 	if *bundleExport != "" {
 		if err := handleBundleExport(*bundleExport); err != nil {
 			fmt.Fprintf(os.Stderr, "error: %v\n", err)
@@ -108,6 +114,7 @@ func main() {
 
 	imageName := flag.Arg(0)
 
+	//nolint:errcheck // writes to stderr, nothing useful to do on error
 	if err := run(imageName, *policyFile, *outputFormat, *verbose, *offline, *useCache, *cacheDir); err != nil {
 		fmt.Fprintf(os.Stderr, "error: %v\n", err)
 		os.Exit(1)
@@ -122,6 +129,7 @@ func run(imageName, policyPath, format string, verbose, offline, useCache bool, 
 	}
 
 	// 1. Load image
+	//nolint:errcheck // writes to stderr, nothing useful to do on error
 	if verbose {
 		fmt.Fprintf(os.Stderr, "→ inspecting image %s\n", imageName)
 	}
@@ -141,6 +149,7 @@ func run(imageName, policyPath, format string, verbose, offline, useCache bool, 
 		}
 	}
 
+	//nolint:errcheck // writes to stderr, nothing useful to do on error
 	if cached, found := cache.Get(digest); found && useCache {
 		if verbose {
 			fmt.Fprintf(os.Stderr, "→ using cached result from %s\n", cached.CachedAt.Format(time.RFC3339))
@@ -150,6 +159,7 @@ func run(imageName, policyPath, format string, verbose, offline, useCache bool, 
 	}
 
 	// 2. Extract facts
+	//nolint:errcheck // writes to stderr, nothing useful to do on error
 	if verbose {
 		fmt.Fprintf(os.Stderr, "→ extracting facts\n")
 	}
@@ -165,6 +175,7 @@ func run(imageName, policyPath, format string, verbose, offline, useCache bool, 
 		return fmt.Errorf("failed to load policy: %w", err)
 	}
 
+	//nolint:errcheck // writes to stderr, nothing useful to do on error
 	if verbose {
 		fmt.Fprintf(os.Stderr, "→ evaluating %d rules\n", len(pol.Rules))
 	}
@@ -175,8 +186,8 @@ func run(imageName, policyPath, format string, verbose, offline, useCache bool, 
 
 	// cache result
 	if useCache {
-		if cached, err := image.ImageToCache(img); err == nil {
-			cache.Put(digest, cached)
+		if cached, cacheErr := image.ImageToCache(img); cacheErr == nil {
+			_ = cache.Put(digest, cached) // best effort caching, ignore errors
 		}
 	}
 
