@@ -279,16 +279,16 @@ func Export(sourceDir, outputPath, name, version, description string) error {
 		})
 
 		// add to tar
-		if err := tw.WriteHeader(&tar.Header{
+		if writeErr := tw.WriteHeader(&tar.Header{
 			Name:    entry.Name(),
 			Size:    int64(len(content)),
 			Mode:    0644,
 			ModTime: time.Now(),
-		}); err != nil {
-			return err
+		}); writeErr != nil {
+			return writeErr
 		}
-		if _, err := tw.Write(content); err != nil {
-			return err
+		if _, writeErr := tw.Write(content); writeErr != nil {
+			return writeErr
 		}
 	}
 
@@ -307,16 +307,16 @@ func Export(sourceDir, outputPath, name, version, description string) error {
 	}
 
 	// add manifest to tar
-	if err := tw.WriteHeader(&tar.Header{
+	if writeErr := tw.WriteHeader(&tar.Header{
 		Name:    "manifest.json",
 		Size:    int64(len(manifestData)),
 		Mode:    0644,
 		ModTime: time.Now(),
-	}); err != nil {
-		return err
+	}); writeErr != nil {
+		return writeErr
 	}
-	if _, err := tw.Write(manifestData); err != nil {
-		return err
+	if _, writeErr := tw.Write(manifestData); writeErr != nil {
+		return writeErr
 	}
 
 	return nil
