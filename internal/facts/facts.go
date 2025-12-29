@@ -6,8 +6,8 @@ import (
 	"strings"
 	"time"
 
-	v1 "github.com/google/go-containerregistry/pkg/v1"
 	"github.com/R00TKI11/boltguard/internal/image"
+	v1 "github.com/google/go-containerregistry/pkg/v1"
 )
 
 // Facts represents everything we extract from an image that policies care about

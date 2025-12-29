@@ -30,11 +30,11 @@ type Report struct {
 // New creates a report from evaluation results
 func New(imageName string, f *facts.Facts, results []*rules.Result, p *policy.Policy) *Report {
 	r := &Report{
-		ImageName: imageName,
-		Facts:     f,
-		Results:   results,
-		Policy:    p,
-		Timestamp: time.Now(),
+		ImageName:  imageName,
+		Facts:      f,
+		Results:    results,
+		Policy:     p,
+		Timestamp:  time.Now(),
 		TotalRules: len(results),
 		BySeverity: rules.CountBySeverity(results),
 	}
@@ -51,6 +51,7 @@ func New(imageName string, f *facts.Facts, results []*rules.Result, p *policy.Po
 }
 
 // Text outputs a human-readable text report
+//
 //nolint:errcheck // writes to stdout, nothing useful to do on error
 func (r *Report) Text(w io.Writer) error {
 	fmt.Fprintf(w, "BoltGuard Report\n")

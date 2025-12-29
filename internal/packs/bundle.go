@@ -13,11 +13,11 @@ import (
 
 // Bundle represents a policy/advisory pack for offline updates
 type Bundle struct {
-	Name        string    `json:"name"`
-	Version     string    `json:"version"`
-	Description string    `json:"description"`
-	CreatedAt   time.Time `json:"created_at"`
-	Policies    []Policy  `json:"policies"`
+	Name        string     `json:"name"`
+	Version     string     `json:"version"`
+	Description string     `json:"description"`
+	CreatedAt   time.Time  `json:"created_at"`
+	Policies    []Policy   `json:"policies"`
 	Advisories  []Advisory `json:"advisories,omitempty"`
 }
 
