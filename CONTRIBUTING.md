@@ -7,7 +7,7 @@ Thanks for your interest in contributing!
 ### Prerequisites
 
 - Go 1.21 or later
-- Docker (for testing image inspection)
+- Docker for testing image inspection, or you can bring your image
 - Make (optional but recommended)
 
 ### Setup
