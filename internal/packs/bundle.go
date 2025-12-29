@@ -59,6 +59,7 @@ func NewBundleManager(dir string) (*BundleManager, error) {
 }
 
 // Import loads a bundle tarball and extracts it
+//
 //nolint:errcheck // defer close calls - standard pattern
 func (m *BundleManager) Import(path string) (*Bundle, error) {
 	f, err := os.Open(path)
@@ -234,6 +235,7 @@ func (m *BundleManager) save(bundle *Bundle) error {
 }
 
 // Export creates a bundle tarball from a directory
+//
 //nolint:errcheck // defer close calls - standard pattern
 func Export(sourceDir, outputPath, name, version, description string) error {
 	f, err := os.Create(outputPath)
@@ -265,9 +267,9 @@ func Export(sourceDir, outputPath, name, version, description string) error {
 			continue
 		}
 
-		content, err := os.ReadFile(filepath.Join(sourceDir, entry.Name()))
-		if err != nil {
-			return err
+		content, readErr := os.ReadFile(filepath.Join(sourceDir, entry.Name()))
+		if readErr != nil {
+			return readErr
 		}
 
 		policies = append(policies, Policy{
